@@ -1,0 +1,29 @@
+[
+    {
+        "id": 1,
+        "title": "Teclado",
+        "description": "es un teclado de oficina",
+        "price": 1000,
+        "thumbnail": "a",
+        "code": "ksfg12de56Sjdk",
+        "stock": 12
+    },
+    {
+        "id": 2,
+        "title": "Mouse",
+        "description": "es un teclado de oficina",
+        "price": 1000,
+        "thumbnail": "a",
+        "code": "ksfg12de56Sjd",
+        "stock": 12
+    },
+    {
+        "id": 3,
+        "title": "Pantalla",
+        "description": "es un teclado de oficina",
+        "price": 1000,
+        "thumbnail": "a",
+        "code": "ksfg12de56Sj",
+        "stock": 12
+    }
+]

@@ -4,6 +4,7 @@ import {manager} from "./ProductManager.js"
 const app =  express();
 
 app.use (express.json());
+
 app.get("/api/products",async(req,res)=>{
     try{
         const products = await manager.getProducts(req.query);
@@ -13,7 +14,7 @@ app.get("/api/products",async(req,res)=>{
     }
 });
 
-app.get("/aou/products/:id",async(req,res)=>{
+app.get("/api/products/:id",async(req,res)=>{
     const {id} = req.params
     try{
         const product = await manager.getProductById(+id);
@@ -28,6 +29,21 @@ app.get("/aou/products/:id",async(req,res)=>{
     }
 });
 
+ app.post("/api/products", async(req,res)=>{
+    const {title, code, password} = req.body;
+    if(!title || !code || !password) {
+        return res.status(400).json({message:"falta información"});
+    }
+    try{
+        const response = await manager.addProduct(req.body);
+        res.status(200).json({message:"Producto creado", producto: response}); 
+    }catch(error){
+        res.status(500).json({message:error.message});
+    }
+
+}) 
+
 app.listen(8080, ()=>{
     console.log("Escuchando al puerto")
 })
+

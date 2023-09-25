@@ -1,17 +1,19 @@
-import { existsSync, promises} from "fs";
-import { createHash} from "crypto"
-const path = "Products.json"
+import fs from 'fs';
+
 
 class ProductManager {
-  async getProducts(queryObj){
-    const {limit} = queryObj;
+  constructor(path){
+    this.path = path
+  }
+  async getProducts(queryObj ){
+    const {limit}= queryObj;
     try{
-      if(existsSync(path)){
-        const productFile = await promises.readFile (path, "utf-8")
-        return JSON.parse(productFile)
+      if(fs.existsSync(this.path)){
+        const productFile = await fs.promises.readFile (this.path, "utf-8");
+        const productsData = JSON.parse(productFile);
         return limit ? productsData.slice(0,+limit) : productsData;
       } else {
-        return []
+       return []
       }
 
     } catch(error) {
@@ -36,16 +38,15 @@ class ProductManager {
 
       const products = await this.getProducts ({});
       let id
-      if(!this.products.length){
+      if(!products.length){
           id=1
       }   else{
-          id=this.products[this.products.length-1].id+1
+          id=products[this.products.length-1].id+1
       }
-
       const NewProduct = {id, ...product};
       products.push(NewProduct)
-      await promises.writeFile (path, JSON.stringify(products));
-      return newUser
+      await fs.promises.writeFile (this.path, JSON.stringify(products));
+      return NewProduct
     } catch (error) {
       return error
     }
@@ -55,7 +56,7 @@ class ProductManager {
     try {
       const products = await this.getProducts({});
       const newArrayProducts = products.filter (u=>u.id!==id);
-      await fs.promises.writeFile (path, JSON.stringify(newArrayProducts))
+      await fs.promises.writeFile (this.path, JSON.stringify(newArrayProducts))
     } catch (error) {
       return error
     }
@@ -65,12 +66,7 @@ class ProductManager {
     try {
       const products = await this.getProducts({});
       const product = products.find (u=>u.id===id);
-      if(!product){
-        return "no existe producto con ese id"
-      }
-      else{
-        return product
-      }
+      return product;
     } catch (error) {
       return error
     }
@@ -87,7 +83,7 @@ class ProductManager {
         product.price = data;
         const newArrayProducts = products.filter (u=>u.id!==id)
         newArrayProducts.push (product)
-        await fs.promises.writeFile (path, JSON.stringify(newArrayProducts))
+        await fs.promises.writeFile (this.path, JSON.stringify(newArrayProducts))
       }
       
     }
@@ -96,7 +92,10 @@ class ProductManager {
     }
   }
 
-}
+  }
+
+  export const manager = new ProductManager("products.json");
+
 /* class ProductManager {
   constructor (){
       this.products = []
@@ -145,34 +144,23 @@ addProducts (product) {
   return newProduct
 }
 
-}
-*/
+} */
 
-const product1 = {
-  title: "Teclado",
-  description: "es un teclado de oficina",
-  price: 1000,
-  thumbnail: "a",
-  code: "ksfg12de56Sjdk",
-  stock: 12,
-}
 
-/* manager1.addProduct ({
-  title: "mouse",
-  description: "gamer",
-  price: 10000,
-  thumbnail: "a",
-  code: "ksfg12de56Sjdkd",
-  stock: 132,
-}) */
-async function test(){
-  const manager1 = new ProductManager ()
-  await manager1.addProduct(product1);
+/* async function test(){
+  const manager = new ProductManager ("products.json");
+  await manager.addProduct({
+    title: "Teclado",
+    description: "es un teclado de oficina",
+    price: 1000,
+    thumbnail: "a",
+    code: "ksfg12de56Sjdk",
+    stock: 12,
+  } );
 }
 
-test();
+test();  */
 
-export const manager = new ProductManager();
 
 
 /* manager1.getProductById(2) */ /* control de que funciona el buscador por id*/
