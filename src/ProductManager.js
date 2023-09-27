@@ -5,7 +5,7 @@ class ProductManager {
   constructor(path){
     this.path = path
   }
-  async getProducts(queryObj ){
+  async getProducts(queryObj={}){
     const {limit}= queryObj;
     try{
       if(fs.existsSync(this.path)){
@@ -23,28 +23,29 @@ class ProductManager {
 
   async addProduct (product){
     try {
-      const { title, description, price, thumbnail, code, stock} = product
+      /* const { title, description, price, thumbnail, code, stock, category, status=True} = product
  
-      if (!title || !description || !price || !thumbnail || !code || !stock) {
+      if (!title || !description || !price ||  || !code || !stock) {
         console.log ("Falta un dato para cargar el producto")
         return
-      }
+      } */
 
-      const CodeCheck = this.products.some((p)=> p.code === code)
+      /* const CodeCheck = this.products.some((p)=> p.code === code)
       if (CodeCheck) {
         console.log("el Code ya fue usado")
         return
-      }
+      } */
 
       const products = await this.getProducts ({});
+      console.log (products);
       let id
       if(!products.length){
           id=1
       }   else{
-          id=products[this.products.length-1].id+1
+          id=products[products.length-1].id+1
       }
       const NewProduct = {id, ...product};
-      products.push(NewProduct)
+      products.push(NewProduct);
       await fs.promises.writeFile (this.path, JSON.stringify(products));
       return NewProduct
     } catch (error) {
@@ -94,7 +95,80 @@ class ProductManager {
 
   }
 
-  export const manager = new ProductManager("products.json");
+  export const manager = new ProductManager("./src/products.json");
+
+  class CartManager {
+    constructor(path){
+      this.path = path
+    }
+    async getCarts(){
+    try{
+      if(fs.existsSync(this.path)){
+        const cartFile = await fs.promises.readFile (this.path, "utf-8");
+        const cartsData = JSON.parse(cartFile);
+        return  cartsData;
+      } else {
+       return []
+      }
+
+    } catch(error) {
+      return error
+    }
+  }
+
+    async createCart () {
+        try{
+            const carts = await this.getCarts ({});
+            let idCart
+            if(!carts.length){
+                idCart=1
+            }   else{
+                idCart=carts.length+1/* carts[carts.length-1].idCart+1 */
+            }      
+            const NewCart ={idCart, "products":[]};
+            carts.push(NewCart)
+            await fs.promises.writeFile (this.path, JSON.stringify(carts));
+            return NewCart
+        } catch (error) {
+            return error
+        }
+    }
+    async addProductToCart (idCart,id) {
+      try{
+        const carts = await this.getCarts();
+        const Cart = await this.getCartById (idCart);
+        if(Cart){
+          const Product = Cart.products.find(u=>u.id===id);
+          if(Product){
+            const index = Cart.products.findIndex(u=>u.id==id)
+            Cart.products[index].qty += 1
+          }else{
+            const newProd = {id,qty: 1}
+            Cart.products.push(newProd)
+          }
+          const filterCart = carts.filter (u=>u.idCart != idCart)
+          filterCart.push (Cart)
+          await fs.promises.writeFile(this.path,JSON.stringify(filterCart))
+        }
+        return Cart
+
+      }catch (error) {
+        return error
+    }
+    }
+
+    async getCartById(idCart) {
+        try {
+          const carts = await this.getCarts({});
+          const cart = carts.find (u=>u.idCart===idCart);
+          return cart;
+        } catch (error) {
+          return error
+        }
+      }
+}
+
+export const manager2 = new CartManager("./src/carrito.json");
 
 /* class ProductManager {
   constructor (){

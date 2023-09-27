@@ -1,11 +1,18 @@
 import express from "express"
-import {manager} from "./ProductManager.js"
+/* import {manager} from "./ProductManager.js" */
+import productsRouter from "./routes/products.router.js"
+import cartsRouter from "./routes/carts.router.js"
+import { __dirname } from "./utils.js";
+
 
 const app =  express();
 
 app.use (express.json());
 
-app.get("/api/products",async(req,res)=>{
+app.use("/api/products", productsRouter);
+app.use("/api/carts", cartsRouter);
+
+/* app.get("/api/products",async(req,res)=>{
     try{
         const products = await manager.getProducts(req.query);
         res.status(200).json({message:"Products found", products});
@@ -41,7 +48,7 @@ app.get("/api/products/:id",async(req,res)=>{
         res.status(500).json({message:error.message});
     }
 
-}) 
+})  */
 
 app.listen(8080, ()=>{
     console.log("Escuchando al puerto")
