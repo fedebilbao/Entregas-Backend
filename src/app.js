@@ -66,13 +66,23 @@ const httpServer =app.listen(8080, ()=>{
 });
 
 const socketServer = new Server (httpServer)
+const messages = [];
 
 socketServer.on("connection",(socket)=>{
+    console.log("Cliente conectado: " + socket.id);
     socket.on("disconnect",()=>{
 
     });
     socket.on("newProduct",(a,b,c,d,e)=>{
         socketServer.emit("productUpdated",a,b,c,d,e);
+    });
+
+    socket.on("newUser", (user)=>{
+        socket.broadcast.emit("UserConnected", user);
+    })
+    socket.on ("message", (infoMessage) => {
+        messages.push(infoMessage);
+        socketServer.emit("chat", messages);
     });
     
 
