@@ -1,11 +1,11 @@
 import {Router} from "express"
-import {manager} from "../ProductManager.js";
+import { productsManager } from "../db/managers/ProductsmanagerDB.js"
 
 const router = Router();
 
 router.get("/",async(req,res)=>{
     try{
-        const products = await manager.getProducts(req.query);
+        const products = await productsManager.findAll();
         res.status(200).json({message:"Products found", products});
     }catch(error){
         res.status(500).json({message:error.message});
@@ -15,7 +15,7 @@ router.get("/",async(req,res)=>{
 router.get("/:id",async(req,res)=>{
     const {id} = req.params
     try{
-        const product = await manager.getProductById(+id);
+        const product = await productsManager.findById(id);
         if(!product){
             return res
             .status(404)
@@ -33,7 +33,7 @@ router.post("/", async(req,res)=>{
         return res.status(400).json({message:"falta información"});
     }
     try{
-        const response = await manager.addProduct(req.body);
+        const response = await productsManager.createOne(req.body);
         res.status(200).json({message:"Producto creado", producto: response}); 
     }catch(error){
         res.status(500).json({message:error.message});
@@ -44,7 +44,7 @@ router.post("/", async(req,res)=>{
 router.delete ("/:id", async(req,res) =>{
     const {id} =req.params;
     try{
-        const response = await manager.deleteProduct(+id);
+        const response = await productsManager.deleteOne(id);
         if(!response){
             return res
             .status(404)
@@ -59,7 +59,7 @@ router.delete ("/:id", async(req,res) =>{
 router.put("/:id", async(req,res)=>{
     const{id} =req.params;
     try{
-        const response =await manager.updateProduct(+id,req.body);
+        const response =await productsManager.updateOne(id,req.body);
         if(!response){
             return res
             .status(404)
