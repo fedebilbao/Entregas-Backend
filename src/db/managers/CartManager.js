@@ -9,7 +9,7 @@ class CartsManager {
 
     }
     async findById(id){
-        const result = await cartsModel.findById(id);
+        const result = await cartsModel.findById(id).populate("products.id");
         return result
 
     }
@@ -24,27 +24,39 @@ class CartsManager {
         const result = await cartsModel.create({idCart,...obj})
         return result
     }
-    async updateOne(id,obj){
-        /* const carts = await cartsManager.findAll();
-        const Cart = await cartsManager.findById (idCart);
-        if(Cart){
-          const Product = Cart.products.find(u=>u.id===id);
-          if(Product){
-            const index = Cart.products.findIndex(u=>u.id==id)
-            Cart.products[index].qty += 1
-          }else{
-            const newProd = {id,qty: 1}
-            Cart.products.push(newProd)
-          }
-          const filterCart = carts.filter (u=>u.idCart != idCart)
-          filterCart.push (Cart) */
-        const result = await cartsModel.updateOne({_id: id }, obj);
+    async updateOne(id){
+        const result = await productsManager.findAll({});
+        const cart = await cartsModel.updateOne({_id: id }, result);  
+
         return result
 
     }
-    async deleteOne(id){
-        const result = await cartsModel.deleteOne ({_id: id})
-        return result
+
+    async updateMany(){
+
+    }
+
+    async deleteMany(){
+        
+    }
+
+    async addProducToCart (idCart, idProduct){
+        const cart = await cartsModel.findById(idCart);
+        const productIndex = cart.products.findIndex((p)=>p.id.equals(idProduct));
+        if (productIndex === -1){
+            cart.products.push ({id: idProduct, qty: 1})
+        }
+        else{
+            cart.products[productIndex].qty++;
+        }
+        await cart.save();
+    }
+
+    async deleteOne(idCart,idProduct){
+        const cart = await cartsModel.findById(idCart);
+        const result = cart.products.filter ((p)=>p.id != idProduct);
+        cart.products= result;
+        await cart.save();
     }
 }
 

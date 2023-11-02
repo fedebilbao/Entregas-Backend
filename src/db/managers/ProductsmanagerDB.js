@@ -2,9 +2,24 @@ import { productsModel } from "../models/products.model.js";
 
 class ProductsManager {
 
-    async findAll(){
-        const result = await productsModel.find()
-        return result;
+    async findAll(obj){
+    var { limit = 10,page = 1, sort, ...query} = obj
+        const result = await productsModel.paginate(query,{limit, page, sort: { price: sort}})
+        const info ={
+            payload: result.docs,
+            count: result.totalDocs,
+            totalPages: result.totalPages,
+            prevPage: result.prevPage,
+            nextPage: result.nextPage,
+            page: result.page,
+            hasPrevPage: result.hasPrevPage,
+            hasNextPage: result.hasNextPage,
+            prevLink: result.hasPrevPage ? "http://localhost:8080/api/products?page="+result.prevPage : null,
+            nextLink: result.hasNextPage ? "http://localhost:8080/api/products?page="+result.nextPage : null,
+
+        };
+
+        return {info};
 
     }
     async findById(id){

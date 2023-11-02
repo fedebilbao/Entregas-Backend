@@ -4,16 +4,17 @@ const cartsSchema = new mongoose.Schema ({
     idCart:{
         type:Number,
         required:true,
-        unique:true
     },
     products:[
         {
             id:{
-                type:Number,
+                type: mongoose.SchemaTypes.ObjectId,
+                ref:"Products",
             },
             qty:{
                 type:Number,
-            }
+            },
+            _id:false,
         }
     ]
 

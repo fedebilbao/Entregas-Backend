@@ -79,11 +79,14 @@ socketServer.on("connection",(socket)=>{
 
     socket.on("newUser", (user)=>{
         socket.broadcast.emit("UserConnected", user);
-    })
+    });
     socket.on ("message", (infoMessage) => {
         messages.push(infoMessage);
         socketServer.emit("chat", messages);
     });
+    socket.on("productos", ()=>{
+        socketServer.emit("productos",productos)
+    })
     
 
 

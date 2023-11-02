@@ -1,5 +1,6 @@
 import {Router} from "express"
 import { messageModel } from "../db/models/views.model.js";
+import { productsManager } from "../db/managers/ProductsmanagerDB.js";
 
 const router = Router();
 
@@ -20,5 +21,14 @@ router.get("/",async(req,res)=>{
     router.get("/chat",(req,res)=>{
         res.render("chat")
     })
+
+router.get("/products", async(req,res)=>{
+    const products = await productsManager.findAll(req.query);
+    const productObject = products.info.payload.map(doc=>doc.toObject());
+    console.log(productObject)
+    console.log(products);
+
+    res.render("products",{productObject});
+})
 
 export default router;
