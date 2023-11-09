@@ -31,4 +31,29 @@ router.get("/products", async(req,res)=>{
     res.render("products",{productObject});
 })
 
+router.get ("/cookies", (req,res)=>{
+    res.render("cookies");
+});
+
+router.get("/login", async(req,res)=>{
+    /* if(req.session.user){
+        return res.redirect("/api/views/profile")
+    } */
+    res.render("login")
+})
+
+router.get("/signup", async(req,res)=>{
+    /* if(req.session.user){
+        return res.redirect("/api/views/profile")
+    } */
+    res.render("signup")
+})
+
+router.get("/profile", async(req,res)=>{
+    /* if(!req.session.user){
+        return res.redirect("/login")
+    } */
+    res.render("profile", {user: req.session.user});
+})
+
 export default router;

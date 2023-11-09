@@ -1,12 +1,17 @@
 import express from "express"
+import cookieParser from "cookie-parser"
 /* import {manager} from "./ProductManager.js" */
 import productsdbRouter from "./routes/productsdb.router.js"
 import cartsdbRouter from "./routes/cartsdb.router.js"
 import viewsdbRouter from "./routes/viewsdb.router.js"
+import cookiedbRouter from "./routes/cookiedb.router.js"
+import sessionsdbRouter from "./routes/sessionsdb.router.js"
 import { __dirname } from "./utils.js";
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
 import "./db/configDB.js";
+import session from "express-session"
+import MongoStore from "connect-mongo"
 
 
 const app =  express();
@@ -22,6 +27,22 @@ app.set("views",__dirname+"/views");
 app.use("/api/products", productsdbRouter);
 app.use("/api/carts", cartsdbRouter);
 app.use ("/api/views", viewsdbRouter);
+app.use ("/api/sessions", sessionsdbRouter)
+app.use ("/api/cookie", cookiedbRouter);
+app.use (cookieParser("SecretCookie"));
+/* app.use (session({secret: "secretSession", cookies: {maxAge:60000}})) */
+
+const URI = "mongodb+srv://fedebilbao3:47740646Federicobilbao@cluster0.d4ixrxp.mongodb.net/ecommerce?retryWrites=true&w=majority"
+
+app.use (session({ 
+    store: new MongoStore({
+        mongoUrl: URI,
+    }),
+    secret: "secretSession",
+    cookie: { maxAge: 60000},
+}))
+
+
 
 /* app.get("/api/products",async(req,res)=>{
     try{
