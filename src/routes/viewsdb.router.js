@@ -1,6 +1,7 @@
 import {Router} from "express"
 import { messageModel } from "../db/models/views.model.js";
 import { productsManager } from "../db/managers/ProductsmanagerDB.js";
+import { cartsManager } from "../db/managers/CartManager.js";
 
 const router = Router();
 
@@ -29,6 +30,15 @@ router.get("/products", async(req,res)=>{
     console.log(products);
 
     res.render("products",{productObject});
+})
+
+router.get("/cart/:idCart", async(req,res)=>{
+    const {idCart} =req.params
+    const cart = await cartsManager.findById(idCart);
+    const cartObject = cart.products.map(doc=>doc.toObject());
+    console.log (cartObject);
+
+    res.render("cart", {cartObject});
 })
 
 router.get ("/cookies", (req,res)=>{

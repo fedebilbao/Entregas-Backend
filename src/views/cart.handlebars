@@ -1,0 +1,21 @@
+<div style="display:flex; gap: 20px;">
+{{#each cartObject}}
+
+<div style="border-style: solid;border-color:black; padding: 30px;">
+
+<h2>{{id.title}}</h2>
+<h4>{{id.description}}</h4>
+<h5>${{id.price}}</h5>
+<h6>{{id.category}}</h6>
+<p>Unidades pedidas: {{qty}}</p>
+
+</div>
+
+{{/each}}
+
+</div>
+
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/carts.js"></script>
