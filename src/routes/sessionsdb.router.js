@@ -37,12 +37,12 @@ router.post ("/login", async(req,res)=>{
         } catch(error){
         res.status(500).json({error});
     }
-
-    router.get ("/signout", (res,req)=>{
-        req.session.destroy(()=>{
-            res.redirect("/login");
-        })
-    })
-
 })
+
+router.get ("/signout", (req,res)=>{
+    req.session.destroy(()=>{
+        res.redirect("/api/views/login");
+    });
+});
+
 export default router;

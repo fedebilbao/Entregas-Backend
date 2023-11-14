@@ -9,6 +9,7 @@ class UsersManager {
 
     async findByEmail(email){
         const response = await usersModel.findOne({email});
+        console.log (response);
         return response;
     }
 

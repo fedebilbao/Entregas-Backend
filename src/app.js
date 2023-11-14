@@ -11,26 +11,17 @@ import { engine } from "express-handlebars";
 import { Server } from "socket.io";
 import "./db/configDB.js";
 import session from "express-session"
+/* import { fileStore } from "session-file-store"
+const FileStore = FileStore(session); */
 import MongoStore from "connect-mongo"
 
 
 const app =  express();
+
 app.use (express.json());
 app.use(express.urlencoded({ extended:true}));
 app.use(express.static(__dirname+"/public"));
-
-app.engine("handlebars",engine());
-app.set("view engine","handlebars");
-app.set("views",__dirname+"/views");
-
-
-app.use("/api/products", productsdbRouter);
-app.use("/api/carts", cartsdbRouter);
-app.use ("/api/views", viewsdbRouter);
-app.use ("/api/sessions", sessionsdbRouter)
-app.use ("/api/cookie", cookiedbRouter);
 app.use (cookieParser("SecretCookie"));
-/* app.use (session({secret: "secretSession", cookies: {maxAge:60000}})) */
 
 const URI = "mongodb+srv://fedebilbao3:47740646Federicobilbao@cluster0.d4ixrxp.mongodb.net/ecommerce?retryWrites=true&w=majority"
 
@@ -41,6 +32,21 @@ app.use (session({
     secret: "secretSession",
     cookie: { maxAge: 60000},
 }))
+
+app.engine("handlebars",engine());
+app.set("view engine","handlebars");
+app.set("views",__dirname+"/views");
+
+
+app.use("/api/products", productsdbRouter);
+app.use("/api/carts", cartsdbRouter);
+app.use ("/api/views", viewsdbRouter);
+app.use ("/api/sessions", sessionsdbRouter)
+app.use ("/api/views/cookie", cookiedbRouter);
+
+/* app.use (session({secret: "secretSession", cookies: {maxAge:60000}})) */
+
+
 
 
 
