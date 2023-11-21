@@ -10,10 +10,12 @@ import { __dirname } from "./utils.js";
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
 import "./db/configDB.js";
-import session from "express-session"
+import session from "express-session";
 /* import { fileStore } from "session-file-store"
 const FileStore = FileStore(session); */
-import MongoStore from "connect-mongo"
+import MongoStore from "connect-mongo";
+import "./passport.js";
+import passport from "passport";
 
 
 const app =  express();
@@ -44,6 +46,9 @@ app.use ("/api/views", viewsdbRouter);
 app.use ("/api/sessions", sessionsdbRouter)
 app.use ("/api/views/cookie", cookiedbRouter);
 
+
+app.use (passport.initialize());
+app.use (passport.session());
 /* app.use (session({secret: "secretSession", cookies: {maxAge:60000}})) */
 
 

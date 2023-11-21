@@ -2,6 +2,7 @@ import {Router} from "express"
 import { messageModel } from "../db/models/views.model.js";
 import { productsManager } from "../db/managers/ProductsmanagerDB.js";
 import { cartsManager } from "../db/managers/CartManager.js";
+import passport from "passport";
 
 const router = Router();
 
@@ -59,10 +60,18 @@ router.get("/signup", async(req,res)=>{
 })
 
 router.get("/profile", async(req,res)=>{
-    if(!req.session.user){
+    if(!req.session.passport){
         return res.redirect("/login")
     }
-    res.render("profile", {user: req.session.user});
+    res.render("profile", {user: {first_name, email}});
+})
+
+router.get("/restaurar",async(req,res)=>{
+    res.render("restaurar");
+})
+
+router.get( "/error", async(req,res)=>{
+    res.render ("error");
 })
 
 export default router;
