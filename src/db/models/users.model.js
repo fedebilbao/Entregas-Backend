@@ -11,7 +11,11 @@ const usersSchema = new mongoose.Schema({
     },
     email: {
         type: String,
+        reqiured: true,
         unique: true,
+    },
+    age: {
+        type: Number,
     },
     password: {
         type: String,
@@ -20,6 +24,19 @@ const usersSchema = new mongoose.Schema({
     isGithub:{
         type: Boolean,
         default: false,
+    },
+    isGoogle: {
+        type: Boolean,
+        default: false,
+    },
+    cartId:{
+        type:[{ type: mongoose.SchemaTypes.ObjectId, ref: "Carts"}],
+        default: [],
+    },
+    role: {
+        type: String,
+        enum: ["ADMIN", "PREMIUM", "CLIENT"],
+        default: "CLIENT",
     }
 
 });

@@ -3,6 +3,7 @@ import { messageModel } from "../db/models/views.model.js";
 import { productsManager } from "../db/managers/ProductsmanagerDB.js";
 import { cartsManager } from "../db/managers/CartManager.js";
 import passport from "passport";
+import { jwtValidation } from "../middlewares/jwt.middleware.js";
 
 const router = Router();
 
@@ -70,7 +71,8 @@ router.get("/restaurar",async(req,res)=>{
     res.render("restaurar");
 })
 
-router.get( "/error", async(req,res)=>{
+router.get( "/error", jwtValidation, async(req,res)=>{
+
     res.render ("error");
 })
 

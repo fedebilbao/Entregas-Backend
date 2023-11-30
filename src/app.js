@@ -6,6 +6,7 @@ import cartsdbRouter from "./routes/cartsdb.router.js"
 import viewsdbRouter from "./routes/viewsdb.router.js"
 import cookiedbRouter from "./routes/cookiedb.router.js"
 import sessionsdbRouter from "./routes/sessionsdb.router.js"
+import usersdbRouter from "./routes/usersdb.router.js"
 import { __dirname } from "./utils.js";
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
@@ -45,6 +46,7 @@ app.use("/api/carts", cartsdbRouter);
 app.use ("/api/views", viewsdbRouter);
 app.use ("/api/sessions", sessionsdbRouter)
 app.use ("/api/views/cookie", cookiedbRouter);
+app.use ( "/api/users", usersdbRouter);
 
 
 app.use (passport.initialize());
