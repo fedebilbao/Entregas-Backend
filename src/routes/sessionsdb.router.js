@@ -36,16 +36,16 @@ router.post ("/login", async(req,res)=>{
         }
         //sessions
 
-        /* const sessionInfo = ( email === "adminCoder@coder.com" && password === "adminCod3r123") ? {email, first_name: user.first_name, isAdmin:true} : {email, first_name: user.first_name, isAdmin:false}
+        const sessionInfo = ( email === "adminCoder@coder.com" && password === "adminCod3r123") ? {email, first_name: user.first_name, isAdmin:true} : {email, first_name: user.first_name, isAdmin:false}
         req.session.user = sessionInfo; 
-        res.redirect("/api/views/profile"); */
+        res.redirect("/api/views/profile");
 
         //jwt
-        const {first_name, last_name, role} = user;
+        /* const {first_name, last_name, role} = user;
 
-        const token = generateToken ({first_name,last_name, email, role});
+        const token = generateToken ({first_name,last_name, email, role}); */
          /* res.json({message:"Token", token }); */
-        res.status(200).cookie("token", token, {httpOnly: true}).json({message: "Bienvenido", token});
+        /* res.status(200).cookie("token", token, {httpOnly: true}).json({message: "Bienvenido", token}); */
         } catch(error){
         res.status(500).json({error});
     }
@@ -99,13 +99,8 @@ router.post("/restaurar", async(req,res)=>{
 })
 
 router.get ("/current", (req,res)=>{
-    try{
-    const currentUser= req.user
-    const currentUserObject = currentUser.map(doc=>doc.toObject());
-    res.render("user", currentUserObject);
-    } catch{
-
-    }
+    res.render("user", {user: req.session.user });
+    console.log(req.session.user)
 })
 
 export default router;

@@ -61,10 +61,10 @@ router.get("/signup", async(req,res)=>{
 })
 
 router.get("/profile", async(req,res)=>{
-    if(!req.session.passport){
-        return res.redirect("/login")
+    if(!req.session.user){
+        return res.redirect("/api/views/login")
     }
-    res.render("profile", {user: {first_name, email}});
+    res.render("profile", {user: req.session.user});
 })
 
 router.get("/restaurar",async(req,res)=>{

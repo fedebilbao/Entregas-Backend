@@ -37,8 +37,8 @@ passport.use("login", new LocalStrategy ({ usernameField: "email"}, async(email,
         if(!isPasswordValid){
             return done (null, false);
         }
-        /* const sessionInfo = ( email === "adminCoder@coder.com" && password === "adminCod3r123") ? {email, first_name: user.first_name, isAdmin:true} : {email, first_name: user.first_name, isAdmin:false}
-        req.session.user = sessionInfo; */
+        const sessionInfo = ( email === "adminCoder@coder.com" && password === "adminCod3r123") ? {email, first_name: user.first_name, isAdmin:true} : {email, first_name: user.first_name, isAdmin:false}
+        req.session.user = sessionInfo;
         return done (null, user);
         } catch(error){
         done(error);

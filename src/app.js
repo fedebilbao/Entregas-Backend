@@ -51,8 +51,8 @@ app.use ( "/api/users", usersdbRouter);
 
 app.use (passport.initialize());
 app.use (passport.session());
-/* app.use (session({secret: "secretSession", cookies: {maxAge:60000}})) */
-
+/* app.use (session({secret: "secretSession", cookies: {maxAge:60000}}))
+ */
 
 
 
