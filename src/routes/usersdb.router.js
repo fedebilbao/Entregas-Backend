@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { usersManager } from "../db/managers/usersManager.js";
+import { usersManager } from "../dao/managers/usersManager.js";
 import { jwtValidation } from "../middlewares/jwt.middleware.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import passport from "passport";

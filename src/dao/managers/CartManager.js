@@ -32,14 +32,6 @@ class CartsManager {
 
     }
 
-    async updateMany(){
-
-    }
-
-    async deleteMany(){
-        
-    }
-
     async addProducToCart (idCart, idProduct){
         const cart = await cartsModel.findById(idCart);
         const productIndex = cart.products.findIndex((p)=>p.id.equals(idProduct));

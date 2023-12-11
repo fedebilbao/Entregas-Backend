@@ -17,6 +17,7 @@ const FileStore = FileStore(session); */
 import MongoStore from "connect-mongo";
 import "./passport.js";
 import passport from "passport";
+import config from "./config.js"
 
 
 const app =  express();
@@ -26,7 +27,7 @@ app.use(express.urlencoded({ extended:true}));
 app.use(express.static(__dirname+"/public"));
 app.use (cookieParser("SecretCookie"));
 
-const URI = "mongodb+srv://fedebilbao3:47740646Federicobilbao@cluster0.d4ixrxp.mongodb.net/ecommerce?retryWrites=true&w=majority"
+const URI = config.mongo_uri
 
 app.use (session({ 
     store: new MongoStore({

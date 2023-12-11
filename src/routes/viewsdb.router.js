@@ -1,7 +1,7 @@
 import {Router} from "express"
 import { messageModel } from "../db/models/views.model.js";
-import { productsManager } from "../db/managers/ProductsmanagerDB.js";
-import { cartsManager } from "../db/managers/CartManager.js";
+import { productsManager } from "../dao/managers/ProductsmanagerDB.js";
+import { cartsManager } from "../dao/managers/CartManager.js";
 import passport from "passport";
 import { jwtValidation } from "../middlewares/jwt.middleware.js";
 

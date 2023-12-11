@@ -1,33 +1,13 @@
 import {Router} from "express";
-import { cartsManager } from "../db/managers/CartManager.js";
+import { findCart, createCart, updateCart} from "../controllers/Cart.controller.js"
+import { cartsManager } from "../dao/managers/CartManager";
 
 const router = Router();
 
 
-router.get("/:idCart",async(req,res)=>{
-    const {idCart} = req.params
-    try{
-        const cart = await cartsManager.findById(idCart);
-        if(!cart){
-            return res
-            .status(404)
-            .json({message: "Carrito no encontrado con este id"});
-        }
-        res.status(200).json({message:"Carrito encontrado",cart});
-    } catch(error){
-        res.status(500).json({message:error.message});
-    }
-});
+router.get("/:idCart", findCart);
 
-router.post("/", async(req,res)=>{
-    try{
-        const response = await cartsManager.createOne();
-        res.status(200).json({message:"Carrito creado", Carrito: response}); 
-    }catch(error){
-        res.status(500).json({message:error.message});
-    }
-
-})  
+router.post("/", createCart);
 
 router.post("/:idCart/product/:id", async(req,res)=>{
     const {id,idCart} = req.params;
@@ -51,17 +31,7 @@ router.delete("/:idCart/product/:id", async(req,res)=>{
     
 })
 
-router.put ("/:idCart",async(req,res)=>{
-    const {idCart} =req.params
-    try{
-        const response = await cartsManager.updateOne(idCart);
-        res.status(200).json({message:"Se modificó tu carrito", Carrito: response}); 
-    }catch(error){
-        res.status(500).json({message:error.message});
-    }
-
-
-})
+router.put ("/:idCart", updateCart)
 
 router.put("/:idCart/product/:id", async(req,res)=>{
     const {id,idCart} =req.params

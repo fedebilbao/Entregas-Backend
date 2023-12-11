@@ -1,10 +1,11 @@
 import passport from "passport"
-import {usersManager} from "./db/managers/usersManager.js";
+import {usersManager} from "./dao/managers/usersManager.js";
 import {Strategy as LocalStrategy} from "passport-local";
 import {Strategy as GithubStrategy} from "passport-github2";
 import {Strategy as GoogleStrategy} from "passport-google-oauth20";
 import {ExtractJwt, Strategy as JwtStrategy} from "passport-jwt";
 import { hashData, compareData } from "./utils.js";
+import config from "./config.js";
 
 
 //Local
@@ -37,7 +38,7 @@ passport.use("login", new LocalStrategy ({ usernameField: "email"}, async(email,
         if(!isPasswordValid){
             return done (null, false);
         }
-        const sessionInfo = ( email === "adminCoder@coder.com" && password === "adminCod3r123") ? {email, first_name: user.first_name, isAdmin:true} : {email, first_name: user.first_name, isAdmin:false}
+        const sessionInfo = ( email === config.mail_admin_coder && password === config.password_admin_coder) ? {email, first_name: user.first_name, isAdmin:true} : {email, first_name: user.first_name, isAdmin:false}
         req.session.user = sessionInfo;
         return done (null, user);
         } catch(error){
@@ -49,8 +50,8 @@ passport.use("login", new LocalStrategy ({ usernameField: "email"}, async(email,
 //Google
 
 passport.use("google", new GoogleStrategy({
-    clientID: "1093197642295-ftbnlphqprv75u8bglgarmlkbdd7hiai.apps.googleusercontent.com",
-    clientSecret: "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",
+    clientID: config.google_client_id,
+    clientSecret: config.google_client_secret,
     callbackURL: "http://localhost:8080/api/sessions/auth/google/callback"
 },
 async function(accessToken, refreshToken, profile, done) {
@@ -95,7 +96,7 @@ passport.serializeUser ((user, done) =>{
 });
 
 //Github
-passport.use("github", new GithubStrategy({clientID: "Iv1.aa0d529a61ca2cbb" , clientSecret: "fa7383f4c98448ad901eece51b1c14f026bbd684" , callbackURL: "http://localhost:8080/api/sessions/callback"}, async (accesToken, refreshToken, profile, done)=>{
+passport.use("github", new GithubStrategy({clientID: config.github_client_id , clientSecret: config.github_client_secret , callbackURL: "http://localhost:8080/api/sessions/callback", scope:["user:email"]}, async (accesToken, refreshToken, profile, done)=>{
 try{
     const userDB = await usersManager.findByEmail(profile._json.email);
     if(userDB){
